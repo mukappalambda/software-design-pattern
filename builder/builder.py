@@ -1,65 +1,51 @@
 class Builder:
-
-    def getTable(self):
+    def buildTable(self):
         raise NotImplementedError
 
-    def getChair(self):
+    def buildChair(self):
         raise NotADirectoryError
 
-    def getBed(self):
+    def buildBed(self):
+        raise NotImplementedError
+
+    def getResult(self):
         raise NotImplementedError
 
 
 class GoodRoomBuilder(Builder):
-    def __init__(self):
+    __name__ = "Good Room Builder"
+
+    def buildTable(self) -> None:
         self.table = "Good Table"
+        return
+
+    def buildChair(self) -> None:
         self.chair = "Good Chair"
+        return
+
+    def buildBed(self) -> None:
         self.bed = "Good Bed"
+        return
 
-    def getTable(self) -> str:
-        return self.table
-
-    def getChair(self) -> str:
-        return self.chair
-
-    def getBed(self) -> str:
-        return self.bed
-
-
-class Room:
-
-    def setTable(self, table: str):
-        self.table = table
-
-    def setChair(self, chair: str):
-        self.chair = chair
-
-    def setBed(self, bed: str):
-        self.bed = bed
-
-    def info(self):
-        info = dict(table=self.table, chair=self.chair, bed=self.bed)
-        print(info)
+    def getResult(self) -> None:
+        print(f"{self.table}; {self.chair}; {self.bed}")
 
 
 class Director:
-    def setBuilder(self, builder: Builder):
-        self.table = builder.getTable()
-        self.chair = builder.getChair()
-        self.bed = builder.getBed()
+    def __init__(self, builder: Builder):
+        self.builder = builder
+        print(f"Instantiate director with {self.builder.__name__}")
 
-    def getRoom(self) -> Room:
-        room = Room()
-        room.setTable(self.table)
-        room.setChair(self.chair)
-        room.setBed(self.bed)
-        return room
+    def build(self):
+        print(f"Invoke build method...")
+        self.builder.buildTable()
+        self.builder.buildChair()
+        self.builder.buildBed()
 
 
 if __name__ == "__main__":
     goodRoomBuilder = GoodRoomBuilder()
 
-    director = Director()
-    director.setBuilder(goodRoomBuilder)
-    room = director.getRoom()
-    room.info()
+    director = Director(builder=goodRoomBuilder)
+    director.build()
+    goodRoomBuilder.getResult()
